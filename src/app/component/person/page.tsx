@@ -9,6 +9,7 @@ export default function Person() {
     const [isLocked, setIsLocked] = useState(false);
     const [attempts, setAttempts] = useState<number>(0); // Состояние для счетчика попыток
     const [successCount, setSuccessCount] = useState<number>(0); // Состояние для счетчика успешных попыток
+    const [nickname, setNickname] = useState<string>(''); // Состояние для никнейма
 
     const fetchHeroes = async () => {
         try {
@@ -24,7 +25,7 @@ export default function Person() {
             const data = await response.json();
             setHeroes(data);
             setSelectedHero(null);
-            // Проверяем, есть ли среди выпавших героев 6★ герой
+            setNickname(''); // Сбрасываем никнейм при новом выборе героев
             const hasSixStarHero = data.some((hero: Hero) => hero.stars === 6);
             setIsLocked(hasSixStarHero); // Блокируем кнопку, если 6★ герой в пуле
         } catch (error) {
@@ -38,8 +39,17 @@ export default function Person() {
         setSelectedHero(hero);
     };
 
+    const handleNicknameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setNickname(event.target.value);
+    };
+
     const saveHero = async () => {
-        if (!selectedHero) return;
+        if (!selectedHero || !nickname) return;
+
+        const heroData = {
+            ...selectedHero,
+            nickname: nickname // Добавляем никнейм к данным героя
+        };
 
         try {
             const response = await fetch('/api/person/person_save', {
@@ -47,7 +57,7 @@ export default function Person() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(selectedHero)
+                body: JSON.stringify(heroData)
             });
 
             if (!response.ok) {
@@ -88,9 +98,26 @@ export default function Person() {
     return (
         <div>
             <h1>Выбор героя</h1>
-            <button className="action-button" onClick={fetchHeroes} disabled={isLocked}>Выбрать героев</button> {/* Блокировка кнопки */}
-            <button className="action-button" onClick={saveHero} disabled={!selectedHero}>Сохранить выбранного героя</button>
-            <button className="action-button" onClick={runAutoTest}>Запустить автотест</button>
+            <button className="action-button" onClick={fetchHeroes} disabled={isLocked}>
+                Выбрать героев
+            </button>
+            <button className="action-button" onClick={saveHero} disabled={!selectedHero || !nickname}>
+                Сохранить выбранного героя
+            </button>
+            <button className="action-button" onClick={runAutoTest}>
+                Запустить автотест
+            </button>
+            {selectedHero && (
+                <div className="action-button">
+                    <h3>Введите никнейм для {selectedHero.name}</h3>
+                    <input 
+                        type="text" 
+                        value={nickname} 
+                        onChange={handleNicknameChange} 
+                        placeholder="Ваш никнейм" 
+                    />
+                </div>
+            )}
             <div className="container">
                 {heroes.map((hero) => (
                     <div 
