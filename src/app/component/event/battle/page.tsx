@@ -3,12 +3,13 @@ import './Battle.css';
 
 interface Monster {
     name: string;
-    health: number; // Здоровье в "здоровье"
+    health: number;
     attack: number;
     agility: number;
     intellect?: number;
-    summon?: string; // Призыв при смерти
-    specialAbility?: string; // Специальная способность
+    summon?: string;
+    specialAbility?: string;
+    image?: string;
 }
 
 interface Player {
@@ -24,7 +25,7 @@ interface BattleProps {
     onClose: () => void;
 }
 
-const HEALTH_MULTIPLIER = 10; // 1 здоровье = 10 ХП
+const HEALTH_MULTIPLIER = 10;
 
 function Battle({ monsters, onClose }: BattleProps) {
     const initialPlayer: Player = {
@@ -32,7 +33,7 @@ function Battle({ monsters, onClose }: BattleProps) {
         currentHealth: 100,
         maxMana: 0,
         currentMana: 0,
-        attack: 4
+        attack: 4,
     };
 
     const [player, setPlayer] = useState(initialPlayer);
@@ -43,19 +44,22 @@ function Battle({ monsters, onClose }: BattleProps) {
     const logRef = useRef<HTMLUListElement>(null);
 
     useEffect(() => {
-        // Инициализация мобильных
         const initializedMonsters = monsters.map(monster => ({
             ...monster,
-            health: monster.health * HEALTH_MULTIPLIER, // Текущее здоровье начинается с значения (здоровье * 10)
+            health: monster.health * HEALTH_MULTIPLIER,
         }));
         setCurrentMonsters(initializedMonsters);
+        setPlayer(prev => ({
+            ...prev,
+            maxMana: initializedMonsters.reduce((acc, m) => acc + (m.intellect || 0) * 4, 0),
+            currentMana: 0,
+        }));
     }, [monsters]);
 
-    // Установка максимальной маны игрока
-    useEffect(() => {
-        const maxMana = currentMonsters.reduce((acc, m) => acc + (m.intellect || 0) * 4, 0);
-        setPlayer(prevPlayer => ({ ...prevPlayer, maxMana, currentMana: 0 }));
-    }, [currentMonsters]);
+    const logMessage = (message: string) => {
+        setBattleLog(prev => [message, ...prev]);
+        logRef.current?.scrollTo(0, logRef.current.scrollHeight);
+    };
 
     const startBattle = () => {
         setBattleLog([]);
@@ -63,16 +67,6 @@ function Battle({ monsters, onClose }: BattleProps) {
         setIsBattleActive(true);
         logMessage(`Начинается бой с ${currentMonsters.map(m => m.name).join(', ')}!`);
     };
-
-    const logMessage = (message: string) => {
-        setBattleLog(prevLog => [message, ...prevLog]);
-    };
-
-    useEffect(() => {
-        if (logRef.current) {
-            logRef.current.scrollTop = logRef.current.scrollHeight;
-        }
-    }, [battleLog]);
 
     const attackMonster = () => {
         if (currentMonsterIndex === null || currentMonsters[currentMonsterIndex].health <= 0) return;
@@ -84,15 +78,13 @@ function Battle({ monsters, onClose }: BattleProps) {
         logMessage(`Вы атаковали ${monster.name} и нанесли ${damageToMonster} урона.`);
         logMessage(`${monster.name} осталось здоровья: ${newMonsterHealth}`);
 
-        setCurrentMonsters(prevMonsters => {
-            const updatedMonsters = [...prevMonsters];
+        setCurrentMonsters(prev => {
+            const updatedMonsters = [...prev];
             updatedMonsters[currentMonsterIndex].health = newMonsterHealth;
             return updatedMonsters;
         });
 
-        if (newMonsterHealth <= 0) {
-            logMessage(`Вы победили ${monster.name}!`);
-        }
+        if (newMonsterHealth <= 0) logMessage(`Вы победили ${monster.name}!`);
 
         setCurrentMonsterIndex(null);
         monsterTurn();
@@ -100,31 +92,22 @@ function Battle({ monsters, onClose }: BattleProps) {
 
     const monsterTurn = () => {
         const aliveMonsters = currentMonsters.filter(m => m.health > 0);
-
         if (aliveMonsters.length === 0) {
             logMessage(`Вы победили всех монстров!`);
             setIsBattleActive(false);
             return;
         }
 
-        aliveMonsters.forEach((monster) => {
+        aliveMonsters.forEach(monster => {
             const damageToPlayer = Math.min(player.currentHealth, monster.attack);
             const newHealth = player.currentHealth - damageToPlayer;
-
             logMessage(`${monster.name} атакует вас и наносит ${damageToPlayer} урона.`);
             logMessage(`У вас осталось здоровья: ${newHealth}`);
 
-            setPlayer(prevPlayer => ({ ...prevPlayer, currentHealth: newHealth }));
-
-            if (newHealth <= 0) {
-                logMessage(`Вы проиграли бой!`);
-                setIsBattleActive(false);
-                return;
-            }
+            setPlayer(prev => ({ ...prev, currentHealth: newHealth }));
+            if (newHealth <= 0) logMessage(`Вы проиграли бой!`);
         });
     };
-
-    const healthPercent = (current: number, max: number) => (current / max) * 100;
 
     return (
         <div className="battle-container">
@@ -134,60 +117,40 @@ function Battle({ monsters, onClose }: BattleProps) {
                 <h4>Монстры:</h4>
                 <div className="monster-card-container">
                     {currentMonsters.map((monster, index) => (
-                        <div
-                            key={index}
-                            className="monster-card"
-                            style={{ opacity: monster.health > 0 ? 1 : 0.5 }}
-                            onClick={() => setCurrentMonsterIndex(index)}
-                        >
-                            <h5>{monster.name}</h5>
-                            <div className="health-bar">
-                                <div className="health-fill" style={{ width: `${healthPercent(monster.health, monster.health)}%` }} />
+                        <div className="monster-card" key={index} onClick={() => setCurrentMonsterIndex(index)}>
+                            <div className="monster-image-container">
+                                {monster.image && <img src={monster.image} alt={monster.name} className="monster-image" />}
                             </div>
-                            <p>Здоровье: {monster.health}/{monster.health}</p> {/* Отображаем здоровье в хп */}
-                            <p>Атака: {monster.attack}</p>
-                            <p>Ловкость: {monster.agility}</p>
-                            {monster.intellect && (
-                                <>
-                                    <p>Интеллект: {monster.intellect}</p>
-                                    <div className="mana-bar" style={{ background: 'lightblue' }}>
-                                        <div className="mana-fill" style={{ width: `${healthPercent(monster.intellect ? 4 * monster.intellect : 0, monster.intellect ? 4 * monster.intellect : 0)}%` }} />
-                                    </div>
-                                    <p>Мана: {monster.intellect ? 4 * monster.intellect : 0}/{monster.intellect ? 4 * monster.intellect : 0}</p>
-                                </>
-                            )}
+                            <div className="monster-header">
+                                <span className="health-label">{monster.health}/{monster.health}❤️</span>
+                                <span className="mana-label">{monster.intellect ? 4 * monster.intellect : 0}/12💧</span>
+                            </div>
+                            <div className="monster-stats">
+                                <span className="attack-label">{monster.attack}⚔️</span>
+                                <span className="agility-label">{monster.agility}⚡</span>
+                            </div>
+                            {currentMonsterIndex === index && <div className="crosshair"></div>}
                         </div>
                     ))}
                 </div>
             </div>
 
             <h2>VS</h2>
-
-            {currentMonsterIndex !== null && (
-                <div className="vs-container">
-                    <h4>{currentMonsters[currentMonsterIndex]?.name}</h4>
-                </div>
-            )}
+            {currentMonsterIndex !== null && <div className="vs-container"><h4>{currentMonsters[currentMonsterIndex]?.name}</h4></div>}
 
             <div className="player-card">
+                <div className="player-header">
+                    <span className="health-label">{player.currentHealth}/{player.maxHealth}❤️</span>
+                    <span className="mana-label">{player.currentMana}/{player.maxMana}💧</span>
+                </div>
                 <h4>Параметры игрока</h4>
                 <p>Атака: {player.attack}</p>
-                <div className="health-bar">
-                    <h4>Ваше здоровье: {player.currentHealth}/{player.maxHealth}</h4>
-                    <div className="health-fill" style={{ width: `${healthPercent(player.currentHealth, player.maxHealth)}%` }} />
-                </div>
-                <div className="mana-bar" style={{ background: 'lightblue' }}>
-                    <h4>Ваша мана: {player.currentMana}/{player.maxMana}</h4>
-                    <div className="mana-fill" style={{ width: `${healthPercent(player.currentMana, player.maxMana)}%` }} />
-                </div>
             </div>
 
             <div className="controls-container">
-                {!isBattleActive ? (
-                    <button onClick={startBattle}>Начать бой</button>
-                ) : (
-                    <button onClick={onClose}>Сдаться</button>
-                )}
+                <button onClick={isBattleActive ? onClose : startBattle}>
+                    {isBattleActive ? 'Сдаться' : 'Начать бой'}
+                </button>
                 {isBattleActive && currentMonsterIndex !== null && (
                     <button onClick={attackMonster}>Атаковать {currentMonsters[currentMonsterIndex]?.name}</button>
                 )}
@@ -195,9 +158,7 @@ function Battle({ monsters, onClose }: BattleProps) {
 
             <h4>Лог боя:</h4>
             <ul ref={logRef} className="battle-log" style={{ maxHeight: '200px', overflowY: 'auto' }}>
-                {battleLog.map((log, index) => (
-                    <li key={index}>{log}</li>
-                ))}
+                {battleLog.map((log, index) => <li key={index}>{log}</li>)}
             </ul>
         </div>
     );

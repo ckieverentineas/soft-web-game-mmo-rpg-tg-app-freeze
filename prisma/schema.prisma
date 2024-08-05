@@ -1,0 +1,39 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id          Int      @id @default(autoincrement())
+  idvk        Int
+  gold        Float
+  crdate      DateTime @default(now())
+  update      DateTime @default(now())
+  select_user Int      @default(0)
+  Person      Person[]
+}
+
+model Person {
+  id          Int           @id @default(autoincrement())
+  name        String
+  class       String
+  health      Float
+  strength    Float
+  dexterity   Float
+  intelligence Float
+  stars       Int
+  crdate      DateTime      @default(now())
+  update      DateTime      @default(now())
+  id_account  Int           @default(1)
+  account     Account       @relation(fields: [id_account], references: [id], onDelete: Cascade)
+  //Inventory   Inventory[]
+  //Achievement Achievement[]
+  //Analyzer    Analyzer[]
+}

@@ -3,22 +3,37 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    height: 100vh; /* Установка высоты для всего контейнера */
-    padding: 20px; /* Отступы */
+    height: 100vh; 
+    padding: 20px;
+    font-family: Arial, sans-serif;
 }
 
-.health-bar,.mana-bar {
+.health-bar,
+.mana-bar {
+    height: 10px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+.monster-stats {
     width: 100%;
-    background: red;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    margin-top: auto; /* Сначала обтекает контент, потом статистику */
 }
 
-.health-fill,.mana-fill {
-    height: 100%;
-    background: green;
-    border-radius: 5px;
+.health-fill {
+    background: linear-gradient(90deg, rgba(255, 0, 0, 0.7), rgba(255, 100, 100, 0.7)); /* Градиент здоровья */
+}
+
+.mana-fill {
+    background: linear-gradient(90deg, rgba(0, 0, 255, 0.7), rgba(100, 100, 255, 0.7)); /* Градиент маны */
+}
+
+.horizontal-bars {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0;
 }
 
 .monster-cards {
@@ -30,35 +45,58 @@
 
 .monster-card-container {
     display: flex;
-    flex-wrap: wrap; /* Позволяет размещать карточки в несколько рядов */
-    justify-content: center; /* Выравнивание карточек по центру */
+    flex-wrap: wrap;
+    justify-content: center; 
 }
 
 .monster-card {
-    background: limegreen;
-    border: 2px solid #aaa; /* Бордер для карточек */
-    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
     padding: 10px;
-    margin: 5px;
-    width: 150px; /* Ширина карточки */
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s; /* Эффекты при наведении */
+    background: rgba(173, 216, 230, 0.9);
+    border: 2px solid #aaa;
+    border-radius: 10px;
+    width: 150px;
+    height: 220px;
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .monster-card:hover {
-    transform: scale(1.05); /* Увеличение карточки при наведении */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Тень при наведении */
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.monster-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
 }
 
 .player-card {
-    background: limegreen;
-    border: 2px solid #aaa; /* Бордер для карточек */
-    border-radius: 8px;
+    background: rgba(173, 216, 230, 0.9);
+    border: 2px solid #aaa;
+    border-radius: 10px; /* Увеличенные углы */
     padding: 10px;
-    margin: 5px;
-    width: 150px; /* Ширина карточки */
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s; /* Эффекты при наведении */
+    margin: 10px; /* Увеличенный отступ */
+    width: 150px;
+    position: relative;
+    transition: box-shadow 0.2s;
+}
+
+.player-card:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.player-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    top: -10px;
 }
 
 ul {
@@ -66,55 +104,98 @@ ul {
     padding: 0;
 }
 
+.monster-image-container {
+    width: 100%;
+    height: 120px;
+}
+
 .controls-container {
     display: flex;
-    flex-direction: column; /* Изменяем направление на столбец для мобильных устройств */
-    margin-top: 20px; /* Отступ сверху для дистанции */
-    width: 100%; /* Ширина контейнера для кнопок */
+    flex-direction: column; 
+    margin-top: 20px; 
+    width: 100%; 
 }
 
 .controls-container button {
-    border: 2px solid #333; /* Граница кнопки */
-    background-color: lime; /* Цвет фона кнопки */
-    padding: 10px 20px; /* Отступы внутри кнопки */
-    cursor: pointer; /* Указатель нажатия */
-    margin: 5px 0; /* Отступы между кнопками */
-    width: 100%; /* Ширина кнопки */
+    border: 2px solid #333; 
+    background-color: lime; 
+    color: white; /* Белый текст */
+    font-weight: bold;
+    padding: 10px 20px; 
+    cursor: pointer; 
+    margin: 5px 0; 
+    width: 100%; 
+    border-radius: 5px; /* Закругленные углы */
+    transition: background-color 0.2s, transform 0.2s; /* Плавный переход */
 }
 
 .controls-container button:hover {
-    background-color: #e0e0e0; /* Цвет фона при наведении */
+    background-color: darkgreen; /* Более темный цвет при наведении */
+    transform: translateY(-2px); /* Легкий подъем */
 }
 
 .battle-log {
-    border: 2px solid #333; /* Граница для лога боя */
-    background-color: lime; /* Цвет фона для лога */
-    padding: 10px; /* Отступы внутри лога */
-    margin-top: 20px; /* Отсутствие дистанции от предыдущих элементов */
-    border-radius: 5px; /* Закругление углов */
-    width: 100%; /* Ширина для лога боя */
+    border: 2px solid #333; 
+    background-color: rgba(173, 216, 230, 0.9); 
+    padding: 10px; 
+    margin-top: 20px; 
+    border-radius: 5px; 
+    width: 100%; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-/* Медиазапросы для адаптации под мобильные устройства */
+.monster-image {
+    width: 100%; 
+    height: 120px; 
+    object-fit: cover; 
+    border-radius: 8px 8px 0 0; 
+}
+
+.health-label,
+.mana-label {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.health-label {
+    color: red;
+}
+
+.mana-label {
+    color: blue;
+}
+
+.attack-label,
+.agility-label {
+    font-size: 14px;
+    margin: 0; 
+}
+
+.crosshair {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80px; 
+    height: 80px; 
+    background: transparent; 
+    border: 4px solid red; 
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none; 
+}
+
+/* Responsive styles */
 @media (max-width: 600px) {
     .monster-card {
-        width: 100%; /* Ширина карточки для мобильных устройств */
-        margin: 5px 0; /* Уменьшаем горизонтальный отступ */
+        width: 90%; /* Полная ширина на мобильных устройствах */
     }
-
     .player-card {
-        width: calc(100% - 20px); /* Ширина карточки игрока */
+        width: calc(100% - 20px); 
     }
-
     .controls-container {
-        flex-direction: column; /* Переключаем на столбец для кнопок */
+        flex-direction: column;
     }
-
-    .controls-container button {
-        width: 100%; /* Кнопки займут всю доступную ширину */
-    }
-
     .battle-log {
-        max-height: 150px; /* Уменьшаем высоту лога для мобильных устройств */
+        max-height: 150px; 
     }
 }

@@ -1,0 +1,59 @@
+body {
+    background-color: #121212; /* Темный фон */
+    color: #ffffff; /* Светлый текст */
+    font-family: Arial, sans-serif; /* Шрифт */
+}
+
+h1 {
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.heroCard {
+    background-color: #1e1e1e; /* Темный фон карточки */
+    border: 2px solid #3f3f3f; /* Серая граница */
+    border-radius: 8px;
+    margin: 10px;
+    padding: 15px;
+    width: 200px; /* Ширина карточки */
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer; /* Указатель курсора при наведении */
+}
+
+.heroCard:hover {
+    transform: scale(1.05); /* Увеличение карточки при наведении */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6); /* Тень при наведении */
+}
+
+.selected {
+    border: 2px solid #ff3e3e; /* Красная граница для выбранного героя */
+    background-color: #292929; /* Изменение фона для выбранного героя */
+}
+
+.action-button {
+    background-color: #ff4747; /* Красный фон для кнопок */
+    color: white; /* Белый текст */
+    border: none; /* Без границы */
+    padding: 10px 20px;
+    font-size: 16px;
+    margin: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: inline-block;
+}
+
+.action-button:hover {
+    background-color: #d42c2c; /* Более темный красный при наведении */
+}
+
+.action-button:disabled {
+    background-color: #777; /* Серый фон для неактивной кнопки */
+    cursor: not-allowed; /* Курсор "недоступен" */
+}

@@ -1,0 +1,25 @@
+-- CreateTable
+CREATE TABLE "Account" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "idvk" INTEGER NOT NULL,
+    "gold" REAL NOT NULL,
+    "crdate" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "update" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "select_user" INTEGER NOT NULL DEFAULT 0
+);
+
+-- CreateTable
+CREATE TABLE "Person" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "name" TEXT NOT NULL,
+    "class" TEXT NOT NULL,
+    "health" REAL NOT NULL,
+    "strength" REAL NOT NULL,
+    "dexterity" REAL NOT NULL,
+    "intelligence" REAL NOT NULL,
+    "stars" INTEGER NOT NULL,
+    "crdate" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "update" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "id_account" INTEGER NOT NULL DEFAULT 1,
+    CONSTRAINT "Person_id_account_fkey" FOREIGN KEY ("id_account") REFERENCES "Account" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
