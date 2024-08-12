@@ -12,8 +12,9 @@ datasource db {
 
 model Account {
   id          Int      @id @default(autoincrement())
-  idvk        Int
-  gold        Float
+  login       String
+  password    String
+  gold        Float    @default(0)
   crdate      DateTime @default(now())
   update      DateTime @default(now())
   select_user Int      @default(0)
