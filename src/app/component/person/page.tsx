@@ -45,10 +45,12 @@ export default function Person() {
 
     const saveHero = async () => {
         if (!selectedHero || !nickname) return;
-
+        // Получаем id_account из локального хранилища
+        const idAccount = localStorage.getItem('id_account'); // Замените 'id_account' на нужный ключ, если он другой
         const heroData = {
             ...selectedHero,
-            nickname: nickname // Добавляем никнейм к данным героя
+            nickname: nickname, // Добавляем никнейм к данным героя
+            id_account: idAccount // Добавляем id_account к данным героя
         };
 
         try {

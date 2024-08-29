@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import './Battle.css';
+import Card_Unit from '../../util/card_unit';
 
 interface Monster {
     name: string;
@@ -117,17 +118,11 @@ function Battle({ monsters, onClose }: BattleProps) {
                 <h4>Монстры:</h4>
                 <div className="monster-card-container">
                     {currentMonsters.map((monster, index) => (
-                        <div className="monster-card" key={index} onClick={() => setCurrentMonsterIndex(index)}>
-                            <div className="monster-image-container">
-                                {monster.image && <img src={monster.image} alt={monster.name} className="monster-image" />}
-                            </div>
-                            <div className="monster-header">
-                                <span className="health-label">{monster.health}/{monster.health}❤️</span>
-                                <span className="mana-label">{monster.intellect ? 4 * monster.intellect : 0}/12💧</span>
-                            </div>
-                            <div className="monster-stats">
-                                <span className="attack-label">{monster.attack}⚔️</span>
-                                <span className="agility-label">{monster.agility}⚡</span>
+                        <div key={index} onClick={() => setCurrentMonsterIndex(index)}>
+                            <div>
+                                <div>
+                                <Card_Unit monster={monster} />
+                                </div>
                             </div>
                             {currentMonsterIndex === index && <div className="crosshair"></div>}
                         </div>

@@ -24,6 +24,7 @@ model Account {
 model Person {
   id          Int           @id @default(autoincrement())
   name        String
+  nickname    String
   class       String
   health      Float
   strength    Float

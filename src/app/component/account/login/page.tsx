@@ -26,7 +26,7 @@ export default function LoginPage() {
 
         if (response.ok) {
             const data = await response.json();
-            localStorage.setItem('userId', data.user.id); // Сохраняем идентификатор пользователя
+            localStorage.setItem('id_account', data.user.id); // Сохраняем идентификатор пользователя
             
             setSuccessMessage('Успешный вход! Вы будете перенаправлены через 3 секунды'); // Устанавливаем сообщение об успехе
             
@@ -69,7 +69,7 @@ export default function LoginPage() {
             {successMessage && <div className="success-message">{successMessage}</div>} {/* Выводим сообщение об успехе */}
             {errorMessage && <div className="error-message">{errorMessage}</div>} {/* Выводим сообщение об ошибке */}
             <p className="switch-page">
-                Нет аккаунта? <Link href="/component/account/registration">Зарегистрируйтесь здесь</Link>
+                Нет аккаунта? <Link href="/component/account/register">Зарегистрируйтесь здесь</Link>
             </p>
         </div>
     );

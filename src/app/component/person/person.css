@@ -38,7 +38,7 @@ h1 {
 
 .action-button {
     background-color: #ff4747; /* Красный фон для кнопок */
-    color: white; /* Белый текст */
+    color: black; /* Белый текст */
     border: none; /* Без границы */
     padding: 10px 20px;
     font-size: 16px;
