@@ -27,7 +27,6 @@ export async function POST(request: Request) {
                 }
             )
         }
-        console.log(ans)
         return NextResponse.json({ 
             message: 'Герои успешно подгружены', 
             persons: ans

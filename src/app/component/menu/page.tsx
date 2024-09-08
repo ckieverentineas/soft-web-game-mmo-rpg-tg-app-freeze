@@ -10,7 +10,7 @@ export default function Dungeon() {
             <div className="container">
                 <div className="grid">
                     <Link href="/profile" className="item">Профиль + инвентари</Link>
-                    <Link href="/time" className="item">Время</Link>
+                    {/*<Link href="/time" className="item">Время</Link> /*/}
                     <Link href="/settings" className="item">Настройки</Link>
                     <Link href="/rating" className="item locked">🔒 Рейтинг</Link>
                     <Link href="/exchange" className="item">Обмен</Link>

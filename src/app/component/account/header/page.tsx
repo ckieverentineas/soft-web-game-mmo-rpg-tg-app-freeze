@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
+import DayNightTimer from '../../util/timer_day_and_night';
 
 interface Hero {
   id: number;
@@ -170,6 +171,7 @@ const Header = () => {
       )}
       
       <div className="flex items-center">
+        <DayNightTimer />
         <button
           className="bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded"
           onClick={handleLogout}
