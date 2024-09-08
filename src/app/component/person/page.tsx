@@ -2,14 +2,17 @@
 import { Hero } from '@/app/config.ts/person';
 import { useState } from 'react';
 import './Person.css'; // Импортируем файл стилей
+import { useRouter } from 'next/navigation';
 
 export default function Person() {
     const [heroes, setHeroes] = useState<Hero[]>([]);
     const [selectedHero, setSelectedHero] = useState<Hero | null>(null);
     const [isLocked, setIsLocked] = useState(false);
-    const [attempts, setAttempts] = useState<number>(0); // Состояние для счетчика попыток
-    const [successCount, setSuccessCount] = useState<number>(0); // Состояние для счетчика успешных попыток
-    const [nickname, setNickname] = useState<string>(''); // Состояние для никнейма
+    const [attempts, setAttempts] = useState<number>(0); 
+    const [successCount, setSuccessCount] = useState<number>(0); 
+    const [nickname, setNickname] = useState<string>(''); 
+    const [successMessage, setSuccessMessage] = useState<string>(''); // Состояние для сообщения об успехе
+    const router = useRouter(); // Инициализация useRouter
 
     const fetchHeroes = async () => {
         try {
@@ -69,6 +72,12 @@ export default function Person() {
 
             const data = await response.json();
             console.log(data.message);
+            setSuccessMessage('Герой успешно создан!'); // Устанавливаем сообщение об успехе
+            
+            // Перенаправление через 3 секунды
+            setTimeout(() => {
+                router.push('/component/menu'); // Перенаправление на главную страницу
+            }, 3000);
         } catch (error) {
             console.error('Ошибка:', error);
         }
@@ -120,6 +129,7 @@ export default function Person() {
                     />
                 </div>
             )}
+            {successMessage && <div className="success-message">{successMessage}</div>} {/* Сообщение об успехе */}
             <div className="container">
                 {heroes.map((hero) => (
                     <div 

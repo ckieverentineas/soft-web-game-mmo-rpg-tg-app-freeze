@@ -38,7 +38,7 @@ const Card_Unit: React.FC<MobComponentProps> = ({ monster }) => {
           <span>💧: {monster.intellect}</span>
         </div>
         <div className="absolute bottom-0 left-0 text-lg">
-          <span>⚔️: {monster.attack}</span>
+          <span>🗡: {monster.attack}</span>
         </div>
         <div className="absolute bottom-0 right-0 text-lg">
           <span>🦶: {monster.agility}</span>
