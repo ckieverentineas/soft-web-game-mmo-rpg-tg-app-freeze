@@ -15,7 +15,7 @@ export default function Dungeon() {
                     <Link href="/rating" className="item locked">🔒 Рейтинг</Link>
                     <Link href="/exchange" className="item">Обмен</Link>
                     <Link href="/achievements" className="item">Достижения</Link>
-                    <Link href="/single-dungeon" className="item">Одиночное подземелье (сад)</Link>
+                    <Link href="/component/event/single-dungeon" className="item">Одиночное подземелье (сад)</Link>
                     <Link href="/tower" className="item">Башня</Link>
                     <Link href="/arena" className="item locked">🔒 Арена</Link>
                     <Link href="/group-dungeon" className="item locked">🔒 Групповое подземелье (гад)</Link>

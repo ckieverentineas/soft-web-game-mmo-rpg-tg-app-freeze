@@ -144,12 +144,10 @@ const Header = () => {
         <span className="font-bold">{hero?.nickname} ({hero?.name}{'⭐'.repeat(hero ? hero.stars : 0)})</span>
       </div>
       <div className="flex items-center">
-        <span className="font-bold">
-          <label className='ml-2' title='Здоровье'>{hero?.health}❤️</label>
-          <label className='ml-2' title='Сила'>{hero?.strength}🗡</label>
-          <label className='ml-2' title='Ловкость'>{hero?.dexterity}🦶</label>
-          <label className='ml-2' title='Интеллект'>{hero?.intelligence}💧</label>
-        </span>
+          <div className='ml-2' title='Здоровье'>{hero?.health}❤️</div>
+          <div className='ml-2' title='Сила'>{hero?.strength}🗡</div>
+          <div className='ml-2' title='Ловкость'>{hero?.dexterity}🦶</div>
+          <div className='ml-2' title='Интеллект'>{hero?.intelligence}💧</div>
       </div>
       {showHeroSelector && (
         <div className="absolute bg-gray-700 rounded shadow-lg mt-12 p-4 max-h-60 overflow-y-auto w-64 z-10" style={{ top: '30%', left: '0.75%' }}>
